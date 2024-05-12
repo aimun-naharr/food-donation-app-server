@@ -141,10 +141,11 @@ async function run() {
         // update supply
         app.put('/api/v1/items/:id', async (req, res) => {
             const { id } = req.params;
+            const { _id, ...rest } = req.body;
             try {
                 const result = await db.collection('items').updateOne(
                     { _id: new ObjectId(id) },
-                    { $set: { ...req.body } }
+                    { $set: { ...rest } }
                 );
                 if (result.matchedCount === 0) {
                     return res.status(404).json({ message: 'Item not found' });
