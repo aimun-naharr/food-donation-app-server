@@ -122,7 +122,12 @@ async function run() {
 
         app.get('/api/v1/items/:id', async (req, res) => {
             try {
-                const item = await Item.findById(req.params.id);
+                const item = await db.collection('items').findOne({ _id: new ObjectId(req.params.id) });
+
+                if (!item) {
+                    return res.status(404).json({ message: 'Item not found' });
+                }
+
                 res.status(201).json({
                     success: true,
                     message: 'successful',
